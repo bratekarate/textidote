@@ -88,17 +88,21 @@ public class CheckLanguage extends Rule
 		{
 			m_languageTool.disableRule("WHITESPACE_RULE");
 		}
+		m_dictionary = dictionary;
+        handleUserDictionary();
+	}
+
+    public void handleUserDictionary() {
 		for (org.languagetool.rules.Rule rule : m_languageTool.getAllActiveRules())
 		{
 			if (rule instanceof SpellingCheckRule)
 			{
-				((SpellingCheckRule) rule).addIgnoreTokens(dictionary);
+				((SpellingCheckRule) rule).addIgnoreTokens(m_dictionary);
 			}
 		}
-		m_dictionary = dictionary;
-	}
+    }
 
-	/**
+	/**,tn
 	 * Creates a new rule for checking a specific language
 	 * @param lang The language to check
 	 * @throws UnsupportedLanguageException If {@code lang} is null
@@ -244,6 +248,7 @@ public class CheckLanguage extends Rule
 		try
 		{
 			m_languageTool.activateLanguageModelRules(f_ngram_dir);
+            handleUserDictionary();
 		}
 		catch (IOException e)
 		{
